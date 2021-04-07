@@ -10,13 +10,15 @@ class IScore(metaclass=ABCMeta):
     ylabel=''
     
     capacity=1
+    legend='k'
     
 
-    def __init__(self,capacity,title,xlabel,ylabel):
+    def __init__(self,capacity,title,xlabel,ylabel,legend):
         self.title=title
         self.capacity=capacity
         self.xlabel=xlabel
         self.ylabel=ylabel
+        self.legend=legend
 
     # k: control variable
     # x: used ratio 
@@ -27,7 +29,7 @@ class IScore(metaclass=ABCMeta):
 
     def plot(self,ax,ks,x:np.ndarray):
         for i in ks:
-            ax.plot(x,self.score(i,x),label='k='+str(i))
+            ax.plot(self.score(i,x),x,label=self.legend+str(i))
 
         ax.set_xlabel(self.xlabel)
         ax.set_ylabel(self.ylabel)
