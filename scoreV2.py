@@ -6,6 +6,7 @@ from Iscore import IScore,ControlEnum
 class ScoreV2(IScore):
   
     def score(self,varibleType:ControlEnum,varible,x:np.ndarray):
+        np.seterr(invalid='ignore')
         k=1
         m=256
         f=20

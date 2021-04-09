@@ -41,7 +41,6 @@ class IScore(metaclass=ABCMeta):
         layout=go.Layout(title=self.title,xaxis={'title':self.xlabel},yaxis={'title':self.ylabel})
         for i in ks:
             arr.append(go.Scatter(name=self.legend+str(i),x=self.score(control,i,x),y=x))
-            # ax.plot(self.score(i,x),x,label=self.legend+str(i))        s=ScoreV2("scoreV2 varies:amp","score","used","amp:")
 
         fig=go.Figure(data=arr,layout=layout)
         fig.show()
