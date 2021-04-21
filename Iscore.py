@@ -11,7 +11,13 @@ class ControlEnum(Enum):
     capacity=0
     f=1
     amp=2
+    m=3
+    b=4
 
+@unique
+class YTypeEnum(Enum):
+    UsedSize=0
+    UsedRatio=1
 
 class IScore(metaclass=ABCMeta):
 
@@ -21,13 +27,22 @@ class IScore(metaclass=ABCMeta):
     
     capacity=1
     legend='k'
-    
+    capacity=1000
 
-    def __init__(self,title,xlabel,ylabel,legend):
+    
+    YType=YTypeEnum.UsedRatio
+
+    def __init__(self,title,legend,yType=YTypeEnum.UsedRatio,capacity=1000):
         self.title=title
-        self.xlabel=xlabel
-        self.ylabel=ylabel
+        self.xlabel="score"
         self.legend=legend
+        self.YType=yType
+        self.capacity=capacity
+        if yType==YTypeEnum.UsedRatio:
+            self.ylabel="used ratio"
+        else:
+            self.ylabel="used size"
+            
 
     # k: control variable
     # x: used ratio 
@@ -39,8 +54,15 @@ class IScore(metaclass=ABCMeta):
     def plot(self,ks,control:ControlEnum,x:np.ndarray):
         arr=[]
         layout=go.Layout(title=self.title,xaxis={'title':self.xlabel},yaxis={'title':self.ylabel})
+        y=x
+        if self.YType==YTypeEnum.UsedSize:
+            if control==ControlEnum.capacity:
+                y=np.max(ks)*x/100
+            else:
+                y=self.capacity*x/100
+
         for i in ks:
-            arr.append(go.Scatter(name=self.legend+str(i),x=self.score(control,i,x),y=x))
+            arr.append(go.Scatter(name=self.legend+str(i),x=self.score(control,i,np.copy(y)),y=y))
 
         fig=go.Figure(data=arr,layout=layout)
         fig.show()

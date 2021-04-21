@@ -3,23 +3,31 @@
 import numpy as np
 from Iscore import IScore,ControlEnum,YTypeEnum
 
-class ScoreV3(IScore):
+class ScoreCoth(IScore):
   
     def score(self,varibleType:ControlEnum,varible,x:np.ndarray):
         np.seterr(invalid='ignore')
-        m=256
-        capacity=1000
-        k=1
-        amp=1.05
+        k=10
+        m=2048
+        capacity=self.capacity
+
 
         if varibleType==ControlEnum.capacity:
             capacity=varible
+        elif varibleType==ControlEnum.m:
+            m=varible    
+
         if(self.YType==YTypeEnum.UsedSize):
             u=x
         else:
             u=x/100*capacity
-        # u=x/100*capacity
+
+        u[np.where(u>capacity)]=0    
+        
         a=capacity-u
 
-        return  k*amp*u+m*(np.log(capacity)-np.log(a))
+        score=(capacity-a)/m+k*1/np.tanh(a/m)
+        
+
+        return  score
 
