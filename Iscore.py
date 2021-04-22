@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 import numpy as np
-import plotly.graph_objects as go
 from abc import ABCMeta, abstractmethod
 from enum import Enum,unique
 import plotly.graph_objects as go
